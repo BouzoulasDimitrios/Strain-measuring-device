@@ -69,13 +69,13 @@ unsigned long readrealcount(int x){
 //
 void setup()
 {
-readings_counter = 0;         //NUMBER OF TIMES WE WROTE OUR READINGS TO THE SD CARD IS SET TO 0  
-Serial.begin(9600);           //SERIAL PORT INITIALIZATION  
-pinMode(10, OUTPUT);          //SETTING PIN 10 AS OUTPUT IN ORDER TO SET UP THE SD CARD BREAKOUT BOARD 
+  readings_counter = 0;         //NUMBER OF TIMES WE WROTE OUR READINGS TO THE SD CARD IS SET TO 0  
+  Serial.begin(9600);           //SERIAL PORT INITIALIZATION  
+  pinMode(10, OUTPUT);          //SETTING PIN 10 AS OUTPUT IN ORDER TO SET UP THE SD CARD BREAKOUT BOARD 
 
-pinMode(15, OUTPUT);          // CLOCK PIN HX711(1ST)
-pinMode(17, OUTPUT);          // CLOCK PIN HX711(2ND)
-pinMode(19, OUTPUT);          // CLOCK PIN HX711(3RD)
+  pinMode(15, OUTPUT);          // CLOCK PIN HX711(1ST)
+  pinMode(17, OUTPUT);          // CLOCK PIN HX711(2ND)
+  pinMode(19, OUTPUT);          // CLOCK PIN HX711(3RD)
 
 //#### CHECK IF SD CARD HAS BEEN INITIALIZED ####
 if (!SD.begin(10)) {          
@@ -143,107 +143,109 @@ if (myFile) {
 
 void loop()
 {
-myFile = SD.open("test.txt", FILE_WRITE); //OPENING THE TEXT FILE THAT WILL STORE OUR READINGS
 
-Serial.setTimeout(100);                   //THE TIMOUT FUNCTIONS STOPS WAITING FOR AN INPUT AFTER A SET AMOUNT OF TIME 
-                                          //IN OUR CASE WE NEED IT BECAUSE WE DONT HAVE A CONSTANT INPUT STRAM FROM THE USER
-                                          
-//### TAKING A READING FROM EVERY HX711 ###
-e1 = reading(1);
-delay(50);
-e2 = reading(2);
-delay(50);
-e3 = reading(3);
-delay(50);
-//
+  myFile = SD.open("test.txt", FILE_WRITE); //OPENING THE TEXT FILE THAT WILL STORE OUR READINGS
 
-Incoming_value = Serial.parseInt();       //READING VALUE FROM PHONE(WAITS FOR 100 MS)
+  Serial.setTimeout(100);                   //THE TIMOUT FUNCTIONS STOPS WAITING FOR AN INPUT AFTER A SET AMOUNT OF TIME 
+                                            //IN OUR CASE WE NEED IT BECAUSE WE DONT HAVE A CONSTANT INPUT STRAM FROM THE USER
+                                            
+  //### TAKING A READING FROM EVERY HX711 ###
+  e1 = reading(1);
+  delay(50);
+  e2 = reading(2);
+  delay(50);
+  e3 = reading(3);
+  delay(50);
+  //
 
-// the incoming value resets to zero after every loop because if the phone doesnt input anything it takes it as a zero
-// so we save the value of the input in a variable:
+  Incoming_value = Serial.parseInt();       //READING VALUE FROM PHONE(WAITS FOR 100 MS)
 
-// THE INCOMING VALUE RESETS TO ZERO IF THE IS NO INPUT FROM THE PHONE 
-// AS A RESULT WE NEED TO SAVE THE INCOMING VALUE INTO A SEPARATE VALUE
+  // the incoming value resets to zero after every loop because if the phone doesnt input anything it takes it as a zero
+  // so we save the value of the input in a variable:
 
-if(Incoming_value == 1) {              //RECALIBRATION SEZUENCE
-  memory_controller=1;                 //SAVING THE INCOMING VALUE SO IT DOESNT RESET TO 0 IN THE NEXT LOOP
-}  
-else if(Incoming_value == 2){          //START WRITING TO SD CARD
-  time_from_reading_start = millis();  //saves time of start to a value
-  readings_counter+=1;                 //INCREACE THE NUMBER OF READING CYCLES BY ONE
-  memory_controller=2;                 //SAVING THE INCOMING VALUE SO IT DOESNT RESET TO 0 IN THE NEXT LOOP
-  myFile.print("set of readings: ");   //WRITING TO THE SD CARD THE NUM OF THE CURRENT READING SYCLE 
-  myFile.println(readings_counter);
-}
-else if(Incoming_value == 3){           //STOP WRITING TO THE SD CARD
-  memory_controller=3;                  //SAVING THE INCOMING VALUE SO IT DOESNT RESET TO 0 IN THE NEXT LOOP
-}
+  // THE INCOMING VALUE RESETS TO ZERO IF THE IS NO INPUT FROM THE PHONE 
+  // AS A RESULT WE NEED TO SAVE THE INCOMING VALUE INTO A SEPARATE VALUE
+
+  if(Incoming_value == 1) {              //RECALIBRATION SEZUENCE
+    memory_controller=1;                 //SAVING THE INCOMING VALUE SO IT DOESNT RESET TO 0 IN THE NEXT LOOP
+  }  
+  else if(Incoming_value == 2){          //START WRITING TO SD CARD
+    time_from_reading_start = millis();  //saves time of start to a value
+    readings_counter+=1;                 //INCREACE THE NUMBER OF READING CYCLES BY ONE
+    memory_controller=2;                 //SAVING THE INCOMING VALUE SO IT DOESNT RESET TO 0 IN THE NEXT LOOP
+    myFile.print("set of readings: ");   //WRITING TO THE SD CARD THE NUM OF THE CURRENT READING SYCLE 
+    myFile.println(readings_counter);
+  }
+  else if(Incoming_value == 3){           //STOP WRITING TO THE SD CARD
+    memory_controller=3;                  //SAVING THE INCOMING VALUE SO IT DOESNT RESET TO 0 IN THE NEXT LOOP
+  }
 
 
-//### READ/WRITE TO SD AND RECALIBRATE ###
+  //### READ/WRITE TO SD AND RECALIBRATE ###
 
-if(memory_controller == 2){                        //PRINT TO SD CARD
+  if(memory_controller == 2){                        //PRINT TO SD CARD
 
-  general_time = millis()-time_from_reading_start; //SAVING THE TIME OF THE READING 
-  myFile.print(general_time/1000);                 //RESETING THE TIME FROM SECONDS TO MS
-  myFile.print(" ");                               //WRITING THE READINGS
-  myFile.print(e1);
-  myFile.print(" ");
-  myFile.print(e2);
-  myFile.print(" ");
-  myFile.print(e3);
-  myFile.println(" ");
+    general_time = millis()-time_from_reading_start; //SAVING THE TIME OF THE READING 
+    myFile.print(general_time/1000);                 //RESETING THE TIME FROM SECONDS TO MS
+    myFile.print(" ");                               //WRITING THE READINGS
+    myFile.print(e1);
+    myFile.print(" ");
+    myFile.print(e2);
+    myFile.print(" ");
+    myFile.print(e3);
+    myFile.println(" ");
 
-}else if(memory_controller == 3){                  //STOP PRINTING READINGS(DO NOTHING IF INPUTEED VAL == 3)
+  }else if(memory_controller == 3){                  //STOP PRINTING READINGS(DO NOTHING IF INPUTEED VAL == 3)
 
-}else if(memory_controller == 1){                  //START RECALIBRATION SEQUENCE
+  }else if(memory_controller == 1){                  //START RECALIBRATION SEQUENCE
 
-  delay(100);
-  Serial.print("calibrating 1");                   //PRINT TO THE PHONE THAT THE DEVICE IS CALIBRATING
+    delay(100);
+    Serial.print("calibrating 1");                   //PRINT TO THE PHONE THAT THE DEVICE IS CALIBRATING
+    Serial.println(" ");
+    Serial.println(" ");
+    Serial.print("|");
+    Serial.print("calibrating 2");
+    Serial.println(" ");
+    Serial.println(" ");
+    Serial.print("|");
+    Serial.print("calibrating 3");
+    Serial.println(" ");
+    Serial.println(" ");
+    Serial.print("|");
+    
+    sample1 = calibration(1);                         //CALIBRATION OF 1ST HX711
+    sample2 = calibration(2);                         //CALIBRATION OF 2ND HX711
+    sample3 = calibration(3);                         //CALIBRATION OF 1RD HX711
+    delay(100);
+    memory_controller = 3;                            //stoping the recordings on the sd card (DO NOTHING)    
+  }
+
+  //###PRINTING TO PHONE###
+    
+  //### PRINTING VALUES OF THE FIRST GAUGE ###
+  Serial.print("1: ");
+  Serial.print(int(e1));
   Serial.println(" ");
   Serial.println(" ");
   Serial.print("|");
-  Serial.print("calibrating 2");
+
+  //### PRINTING VALUES OF THE SECOND GAUGE ###
+  Serial.print("2: ");
+  Serial.print(int(e2));
   Serial.println(" ");
   Serial.println(" ");
   Serial.print("|");
-  Serial.print("calibrating 3");
+
+  //### PRINTING VALUES OF THE THIRD GAUGE ###
+  Serial.print("3: ");
+  Serial.print(int(e3));
   Serial.println(" ");
   Serial.println(" ");
   Serial.print("|");
-  
-  sample1 = calibration(1);                         //CALIBRATION OF 1ST HX711
-  sample2 = calibration(2);                         //CALIBRATION OF 2ND HX711
-  sample3 = calibration(3);                         //CALIBRATION OF 1RD HX711
-  delay(100);
-  memory_controller = 3;                            //stoping the recordings on the sd card (DO NOTHING)    
-}
+  delay(500);
 
-//###PRINTING TO PHONE###
-  
-//### PRINTING VALUES OF THE FIRST GAUGE ###
-Serial.print("1: ");
-Serial.print(int(e1));
-Serial.println(" ");
-Serial.println(" ");
-Serial.print("|");
+  myFile.close(); //CLOSING THE SD CARD FILE
 
-//### PRINTING VALUES OF THE SECOND GAUGE ###
-Serial.print("2: ");
-Serial.print(int(e2));
-Serial.println(" ");
-Serial.println(" ");
-Serial.print("|");
-
-//### PRINTING VALUES OF THE THIRD GAUGE ###
-Serial.print("3: ");
-Serial.print(int(e3));
-Serial.println(" ");
-Serial.println(" ");
-Serial.print("|");
-delay(500);
-
-myFile.close(); //CLOSING THE SD CARD FILE
 }
 
 

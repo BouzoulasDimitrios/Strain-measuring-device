@@ -27,13 +27,13 @@ This is my thesis project. The aim was to develop a strain measurement device wi
 
 This is a strain gauge measurement device. This device uses strain gauges in order to to measure strain. 
 
-![1](https://github.com/BouzoulasDimitrios/Arduino/blob/main/pictures/placement.jpg)
+![1](pictures/placement.jpg)
 
 The device has three inputs and as a result, it can take 3 simultaneous readings.
 
 The control of the device is being done using a phone application that connects to the device via Bluetooth.
 
-![2](https://github.com/BouzoulasDimitrios/Arduino/blob/main/pictures/screenshot_app.PNG)
+![2](pictures/screenshot_app.PNG)
 
 The sensors that are used in this application are strain gauge resistors. They have a default resistance of 120 Ohm, a Gauge Factor of 2 ( GF = 2 ) and the device is built specifically for these sensors. The resistance of these sensors changes as they get stretched and as a result, we can use that change in resistance to measure the strain of the material. ([1](#straingauge))   
 
@@ -52,14 +52,14 @@ The user has 3 options while using the application.
 
 # Circuitry
 
-![3](https://github.com/BouzoulasDimitrios/Arduino/blob/main/pictures/schematic.PNG)
+![3](pictures/schematic.PNG)
 
 
-![5](https://github.com/BouzoulasDimitrios/Arduino/blob/main/pictures/279670787_1705312476483181_8966646382633138351_n.jpg)
+![5](pictures/279670787_1705312476483181_8966646382633138351_n.jpg)
 
 ## mit app inventor blocks: 
 
-![4](https://github.com/BouzoulasDimitrios/Arduino/blob/main/pictures/3%20readings%20recalibrate%20button.PNG)
+![4](pictures/3%20readings%20recalibrate%20button.PNG)
 
 # References
 
